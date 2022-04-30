@@ -2,6 +2,12 @@ import os
 from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
 from models import setup_db, Url, db_drop_and_create_all
+
+
+def insert_readings(urlValue):
+    toBeInserted = Url(urlValue)
+    toBeInserted.insert()
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
@@ -19,7 +25,15 @@ def create_app(test_config=None):
     def get_movies():
         if(request.method == 'POST'):
             #do this
-            return 0
+            reqs = request.get_json()
+            if not reqs:
+                raise JsonRequiredError()
+            try:
+                reqs['name']
+                insert_readings(reqs['name'])
+                return HelloResult(name=reqs['name'])
+            except KeyError:
+                raise JsonInvalidError()
         else:
             try:
                 urls = Url.query.order_by(Url.id).all()
