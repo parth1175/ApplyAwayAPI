@@ -31,7 +31,12 @@ def create_app(test_config=None):
             try:
                 reqs['name']
                 insert_readings(reqs['name'])
-                return HelloResult(name=reqs['name'])
+                return jsonify(
+                    {
+                        "success": True,
+                        "url": reqs['name']
+                    }
+                ), 200
             except KeyError:
                 raise JsonInvalidError()
         else:
