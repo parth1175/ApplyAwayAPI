@@ -8,7 +8,7 @@ def create_app(test_config=None):
     setup_db(app)
     CORS(app)
     """ uncomment at the first time running the app """
-    db_drop_and_create_all()
+    # db_drop_and_create_all()
 
     @app.route('/', methods=['GET'])
     def home():
