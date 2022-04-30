@@ -14,20 +14,27 @@ def create_app(test_config=None):
     def home():
         return jsonify({'message': 'Hello,hello, World!'})
 
-    @app.route("/movies")
+
+    @app.route("/movies", methods=['GET', 'POST'])
     def get_movies():
-        try:
-            urls = Url.query.order_by(Url.id).all()
-            url=[]
-            url=[mov.url for mov in urls]
-            return jsonify(
-                {
-                    "success": True,
-                    "url": url
-                }
-            ), 200
-        except:
-            abort(500)
+        if(request.method == 'POST'):
+            #do this
+            return 0
+        else:
+            try:
+                urls = Url.query.order_by(Url.id).all()
+                url=[]
+                url=[mov.url for mov in urls]
+                return jsonify(
+                    {
+                        "success": True,
+                        "url": url
+                    }
+                ), 200
+            except:
+                abort(500)
+
+
     @app.errorhandler(500)
     def server_error(error):
         return jsonify({
