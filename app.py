@@ -26,6 +26,8 @@ def create_app(test_config=None):
         if(request.method == 'POST'):
             #do this
             reqs = request.get_json()
+            print("This is the POST request that is sent............")
+            print(reqs)
             if not reqs:
                 raise JsonRequiredError()
             try:
