@@ -31,13 +31,20 @@ class Url(db.Model):
     __tablename__ = 'urlvalues'
     id = Column(Integer, primary_key=True)
     url = Column(String(2048))
+    company = Column(String, default = "company not added yet")
+    description = Column(String, default = "description not added yet")
 
-    def __init__(self, url):
+    def __init__(self, url, company, description):
         self.url = url
+        self.company = company
+        self.description = description
+
     def details(self):
         return {
             'id': self.id,
             'url': self.url,
+            'company': self.company,
+            'description': self.description
         }
     def insert(self):
         db.session.add(self)

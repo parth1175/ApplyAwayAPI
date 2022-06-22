@@ -4,8 +4,8 @@ from flask_cors import CORS
 from models import setup_db, Url, db_drop_and_create_all
 
 
-def insert_readings(urlValue):
-    toBeInserted = Url(urlValue)
+def insert_readings(urlValue, companyName, description):
+    toBeInserted = Url(urlValue, companyName, description)
     toBeInserted.insert()
 
 def create_app(test_config=None):
@@ -26,13 +26,18 @@ def create_app(test_config=None):
         if(request.method == 'POST'):
             #do this
             reqs = request.get_json()
-            print("This is the POST request that is sent............")
-            print(reqs)
+            # print(reqs)
             if not reqs:
                 raise JsonRequiredError()
             try:
                 reqs['name']
-                insert_readings(reqs['name'])
+                # make an object from script here
+                # call methods on the object down in the insert_readings() functions
+                insert_readings(reqs['name'], reqs['html'][:15], reqs['html'][16:31])
+                # reqs['html'][:15], reqs['html'][16:31] are temporary placeholders
+
+                # insert the url into the database
+                # send the html text to the script for processing and that script will then insert into the database
                 return jsonify(
                     {
                         "success": True,
@@ -67,5 +72,6 @@ def create_app(test_config=None):
 
 app = create_app()
 if __name__ == '__main__':
+    # migrate = Migrate(app, db)
     port = int(os.environ.get("PORT",5000))
     app.run(host='0.0.0.0',port=port,debug=True)
