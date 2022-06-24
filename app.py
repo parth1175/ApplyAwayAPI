@@ -25,15 +25,19 @@ def create_app(test_config=None):
     def get_movies():
         if(request.method == 'POST'):
             #do this
-            reqs = request.get_json()
+            # reqs = request.get_json()
+            reqs = request.get_data().decode('utf-8')
             # print(reqs)
-            if not reqs:
-                raise JsonRequiredError()
+            # if not reqs:
+            #     raise JsonRequiredError()
             try:
-                reqs['name']
+                # reqs['name']
+                reqs[:10]
                 # make an object from script here
                 # call methods on the object down in the insert_readings() functions
-                insert_readings(reqs['name'], reqs['html'][:15], reqs['html'][16:31])
+                # insert_readings(reqs['name'], reqs['html'][:15], reqs['html'][16:31])
+                insert_readings(reqs[:5], reqs[5:10], reqs[10:15])
+
                 # reqs['html'][:15], reqs['html'][16:31] are temporary placeholders
 
                 # insert the url into the database
@@ -41,11 +45,14 @@ def create_app(test_config=None):
                 return jsonify(
                     {
                         "success": True,
-                        "url": reqs['name']
+                        "url": reqs[:10]
                     }
                 ), 200
             except KeyError:
                 raise JsonInvalidError()
+
+
+
         else:
             try:
                 urls = Url.query.order_by(Url.id).all()
